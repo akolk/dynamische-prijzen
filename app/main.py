@@ -110,8 +110,11 @@ def main():
 
     except Exception as e:
         print(f"An error occurred during execution: {e}")
+        sys.exit(1)
     finally:
         session.close()
+
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
