@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dynamic-energy-prices
+spec:
+  schedule: "0 6 * * *" # Runs every day at 06:00
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: dynamic-energy-prices
+            image: your-registry/dynamic-energy-prices:latest
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: DB_HOST
+              value: "xxx.pg.host.com"
+            - name: DB_PORT
+              value: "12164"
+            - name: DB_NAME
+              value: "dynamischetarieven"
+            - name: DB_USER
+              value: "user"
+            # It is recommended to use Secrets for sensitive data
+            - name: DB_PASSWORD
+              value: "password"
+            # Example using Secret:
+            # - name: DB_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: db-credentials
+            #       key: password
+          restartPolicy: OnFailure
